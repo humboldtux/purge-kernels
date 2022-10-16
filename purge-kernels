@@ -1,0 +1,18 @@
+#!/bin/bash
+
+CURRENT=$(uname -r)
+
+INSTALLED=$(dpkg-query -f '${Package} ${Status}\n' -W "linux-image-[0-9]*" | grep -v "$CURRENT" | awk '$NF == "installed"{print $1}')
+
+[[ "$INSTALLED" == "" ]] && echo "No kernel to uninstall" && exit 0
+
+gum style --border double --padding "1 2" --margin 1 "Running kernel is $CURRENT"
+
+TODO=$(echo "$INSTALLED" | gum choose --no-limit)
+
+test "$TODO" != "" || exit 0
+
+echo "About to uninstall kernel(s):"
+echo "$TODO"
+
+gum confirm && sudo apt-get purge -qq "$TODO"
