@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# https://raw.githubusercontent.com/tteck/Proxmox/main/misc/kernel-clean.sh
+
 CURRENT=$(uname -r)
 
 INSTALLED=$(dpkg-query -f '${Package} ${Status}\n' -W "linux-image-[0-9]*" | grep -v "$CURRENT" | awk '$NF == "installed"{print $1}')
